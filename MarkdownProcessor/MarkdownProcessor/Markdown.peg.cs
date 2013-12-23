@@ -196,6 +196,83 @@ namespace
             return r0;
         }
 
+        private IParseResult<
+            #line 17 "Markdown.peg"
+     string
+            #line default
+            > any(ref Cursor cursor)
+        {
+            IParseResult<string> r0 = null;
+            r0 = this.ParseClass(ref cursor, "\'\'\0\0\'\'....\'\'\uffff\uffff\'\'");
+            return r0;
+        }
+
+        private IParseResult<
+            #line 21 "Markdown.peg"
+         string
+            #line default
+            > anyChar(ref Cursor cursor)
+        {
+            IParseResult<string> r0 = null;
+            var startCursor0 = cursor;
+            IParseResult<string> r1 = null;
+            var startCursor1 = cursor;
+            IParseResult<string> r2 = null;
+            if (r2 == null)
+            {
+                r2 = this.ParseLiteral(ref cursor, "\n");
+            }
+            if (r2 == null)
+            {
+                r2 = this.ParseLiteral(ref cursor, "\r");
+            }
+            cursor = startCursor1;
+            if (r2 == null)
+            {
+                r1 = new ParseResult<string>(cursor, cursor, string.Empty);
+            }
+            if (r1 != null)
+            {
+                IParseResult<string> r3 = null;
+                r3 = this.any(ref cursor);
+                if (r3 != null)
+                {
+                    var len = cursor.Location - startCursor0.Location;
+                    r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                }
+                else
+                {
+                    cursor = startCursor0;
+                }
+            }
+            else
+            {
+                cursor = startCursor0;
+            }
+            return r0;
+        }
+
+        private IParseResult<string> newline(ref Cursor cursor)
+        {
+            IParseResult<string> r0 = null;
+            var startCursor0 = cursor;
+            IParseResult<string> r1 = null;
+            r1 = this.ParseLiteral(ref cursor, "\n");
+            if (r1 != null)
+            {
+                r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
+                    #line 26 "Markdown.peg"
+         ""
+                    #line default
+                    );
+            }
+            else
+            {
+                cursor = startCursor0;
+            }
+            return r0;
+        }
+
         private IParseResult<string> ParseLiteral(ref Cursor cursor, string literal, bool ignoreCase = false)
         {
             if (cursor.Location + literal.Length <= cursor.Subject.Length)

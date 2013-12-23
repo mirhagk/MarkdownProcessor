@@ -13,3 +13,14 @@ let <char>
 EOF
   = !.
   / unexpected:. #ERROR{ "Unexpected character '" + unexpected + "'." }
+
+any <string>
+	= ['\u0000'..'\uFFFF']
+
+	
+anyChar <string>
+	= !('\n' / '\r') any;
+
+	
+newline
+	= '\n' {""}
