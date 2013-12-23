@@ -10,11 +10,6 @@ System Macros
 + `$_importRaw$` - Does the same as `_import` but doesn't process the file (useful for importing css sheets or something like that) 
 + `$_if$` - Takes 3 arguments, if the first is equal to true (case insensitive) then the first argument is outputted, otherwise the second one is outputted.
 + `$_equal$` - Takes 2 arguments, if they are equal, then it returns `true`
++ `$_add$` - Takes 2 arguments, both of which must be numbers, and adds together, returning the result.
 + `$_length$` - Takes 1 argument, and returns the length of it (whether it's a list or just text)
 + `$_elementAt$`- Takes 2 arguments, the first is a list, and the second is an index. It returns
-
-
-$_length$:   
-
-
-$bf$3: 
