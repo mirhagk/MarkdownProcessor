@@ -1,4 +1,4 @@
-NemerleMarkdown
+Markdown Processor
 ===============
 
 A markdown processor written in C#. It runs on the .NET library.
@@ -211,6 +211,21 @@ The benefit is that markdown becomes very customizable, and can be extended to s
 
 
 > Note: This extra features are not yet supported, and might be a while before being supported, so if you have suggestions about how to better implement them, please feel free to open a ticket to discuss it, these are very flexible since the code has not yet been written.
+
+What happens if you call an non-list macro with a list? For instance what happens if you call our `listItem` macro with 4 parameters?
+
+	$listItem${first item}{description}{second item}{description}
+
+Well it simply calls the macro twice. Specifically the following steps are taken:
+
+1. Put all arguments into a queue (a list)
++ Find the macro, and how many arguments it takes.
++ Take as many arguments from the front of the queue as the macro will take
+	+ If there aren't enough, just replace any missing arguments with the empty string
++ Call the macro with the arguments
++ If there are any arguments left over go to step 3.
+
+This is more than just convenience for not calling the same thing multiple times for the same macro, it also lets you call a function that takes a list of arguments with a specific number, or one that takes a specific number with a list.
  
 
 Contribution Help
