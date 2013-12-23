@@ -1,0 +1,15 @@
+﻿@namespace MarkdownProcessor
+@classname MarkdownParser
+
+start
+	= value:text EOF {value}
+
+text <string>
+	= value:(let*) {string.Join("",value)}
+
+let <char>
+	= value:. {value[0]}
+
+EOF
+  = !.
+  / unexpected:. #ERROR{ "Unexpected character '" + unexpected + "'." }
