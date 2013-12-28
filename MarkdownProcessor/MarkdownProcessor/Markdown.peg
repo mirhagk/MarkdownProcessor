@@ -1,23 +1,60 @@
 ﻿@namespace MarkdownProcessor
 @classname MarkdownParser
+@using MarkdownProcessor.Nodes
 
 start
-	= value:nodes EOF {value}
+	= value:document EOF {value}
 
-nodes <string> -memoize
-	= value:(node*) {string.Join("",value)}
+document <List<Node>>
+	= (docPiece / paragraph / linebreak)*
 
-node <string> -memoize
-	= '*' text '*' / text;
+docPiece <Node>
+	= heading
 
-lines
-	= value:((text newline)*) {string.Join("",value)}
+paragraph <Node>
+	= (!docPiece content+ newline?)+
 
-text <string> -memoize
-	= value:(let*) {string.Join("",value)}
+linebreak <Node>
+	= ("\n\r" / "\r\n" / '\r' / '\n')
 
-let <char>
-	= value:. {value[0]}
+heading <Node>
+	= atxHeading / setextHeading
+
+atxHeading <Node>
+	= headingMatchSymbol+ spaces (!('#') content)* '#'* newlines?
+
+headingMatchSymbol <string>
+	= '#'
+
+setextHeading <Node>
+	= content* newline setextBottom newline
+
+setextBottom <char>
+	= '=' spaces '=' spaces (spaces '=')* / '-' spaces '-' spaces (spaces '-')*
+
+spaces <string>
+	=	' '* {""}
+
+newlines <string>
+	= newline+ {""}
+
+newline <string>
+	= linebreak {""}
+
+content <ContentNode>
+	= bold / italic / link / plain
+
+link <ContentNode>
+	= '[' (!']' anyChar)+ "](" (!')' anyChar)* ')'
+
+italic <ContentNode>
+	= '*' (!'*' plain / bold / italic)+ '*' / '_' (!'_' plain / bold / italic)+ '_'
+
+bold <ContentNode>
+	= "**" (!'*' plain / italic / bold)+ "**" / "__" (!'_' plain / italic / bold)+ "__"
+
+plain <ContentNode>
+	= anyChar;
 
 EOF
   = !.
@@ -29,7 +66,3 @@ any <string>
 	
 anyChar <string>
 	= !('\n' / '\r') any;
-
-	
-newline
-	= "\n\r" / "\r\n" / '\n' / '\r' {""}
