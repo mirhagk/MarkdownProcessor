@@ -26,6 +26,7 @@ namespace
            MarkdownParser
     #line default
     {
+        private Dictionary<string, object> storage;
 
         /// <summary>
         ///  Parses a string according to the rules of the <see cref="MarkdownParser" /> grammar.
@@ -38,13 +39,21 @@ namespace
         /// </exception>
         public string Parse(string subject, string fileName = null)
         {
-            var cursor = new Cursor(subject, 0, fileName);
-            var result = this.start(ref cursor);
-            if (result == null)
+            try
             {
-                throw ExceptionHelper(cursor, state => "Failed to parse 'start'.");
+                this.storage = new Dictionary<string, object>();
+                var cursor = new Cursor(subject, 0, fileName);
+                var result = this.start(ref cursor);
+                if (result == null)
+                {
+                    throw ExceptionHelper(cursor, state => "Failed to parse 'start'.");
+                }
+                return result.Value;
             }
-            return result.Value;
+            finally
+            {
+                this.storage = null;
+            }
         }
 
         private IParseResult<string> start(ref Cursor cursor)
@@ -53,7 +62,7 @@ namespace
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
             var valueStart = cursor;
-            r1 = this.text(ref cursor);
+            r1 = this.nodes(ref cursor);
             var valueEnd = cursor;
             var value = ValueOrDefault(r1);
             if (r1 != null)
@@ -64,7 +73,7 @@ namespace
                 {
                     r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
                         #line 5 "Markdown.peg"
-                   value
+                    value
                         #line default
                         );
                 }
@@ -82,11 +91,206 @@ namespace
 
         private IParseResult<
             #line 7 "Markdown.peg"
+       string
+            #line default
+            > nodes(ref Cursor cursor)
+        {
+            IParseResult<string> r0 = null;
+            var storageKey = "nodes:" + cursor.StateKey + ":" + cursor.Location;
+            if (this.storage.ContainsKey(storageKey))
+            {
+                r0 = (IParseResult<string>)this.storage[storageKey];
+                if (r0 != null)
+                {
+                    cursor = r0.EndCursor;
+                }
+                return r0;
+            }
+            var startCursor0 = cursor;
+            IParseResult<IList<string>> r1 = null;
+            var valueStart = cursor;
+            var startCursor1 = cursor;
+            var l0 = new List<string>();
+            while (true)
+            {
+                IParseResult<string> r2 = null;
+                r2 = this.node(ref cursor);
+                if (r2 != null)
+                {
+                    l0.Add(r2.Value);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (l0.Count >= 0)
+            {
+                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+            }
+            else
+            {
+                cursor = startCursor1;
+            }
+            var valueEnd = cursor;
+            var value = ValueOrDefault(r1);
+            if (r1 != null)
+            {
+                r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
+                    #line 8 "Markdown.peg"
+                  string.Join("",value)
+                    #line default
+                    );
+            }
+            else
+            {
+                cursor = startCursor0;
+            }
+            this.storage[storageKey] = r0;
+            return r0;
+        }
+
+        private IParseResult<
+            #line 10 "Markdown.peg"
+      string
+            #line default
+            > node(ref Cursor cursor)
+        {
+            IParseResult<string> r0 = null;
+            var storageKey = "node:" + cursor.StateKey + ":" + cursor.Location;
+            if (this.storage.ContainsKey(storageKey))
+            {
+                r0 = (IParseResult<string>)this.storage[storageKey];
+                if (r0 != null)
+                {
+                    cursor = r0.EndCursor;
+                }
+                return r0;
+            }
+            if (r0 == null)
+            {
+                var startCursor0 = cursor;
+                IParseResult<string> r1 = null;
+                r1 = this.ParseLiteral(ref cursor, "*");
+                if (r1 != null)
+                {
+                    IParseResult<string> r2 = null;
+                    r2 = this.text(ref cursor);
+                    if (r2 != null)
+                    {
+                        IParseResult<string> r3 = null;
+                        r3 = this.ParseLiteral(ref cursor, "*");
+                        if (r3 != null)
+                        {
+                            var len = cursor.Location - startCursor0.Location;
+                            r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                        }
+                        else
+                        {
+                            cursor = startCursor0;
+                        }
+                    }
+                    else
+                    {
+                        cursor = startCursor0;
+                    }
+                }
+                else
+                {
+                    cursor = startCursor0;
+                }
+            }
+            if (r0 == null)
+            {
+                r0 = this.text(ref cursor);
+            }
+            this.storage[storageKey] = r0;
+            return r0;
+        }
+
+        private IParseResult<string> lines(ref Cursor cursor)
+        {
+            IParseResult<string> r0 = null;
+            var startCursor0 = cursor;
+            IParseResult<IList<string>> r1 = null;
+            var valueStart = cursor;
+            var startCursor1 = cursor;
+            var l0 = new List<string>();
+            while (true)
+            {
+                IParseResult<string> r2 = null;
+                var startCursor2 = cursor;
+                IParseResult<string> r3 = null;
+                r3 = this.text(ref cursor);
+                if (r3 != null)
+                {
+                    IParseResult<string> r4 = null;
+                    r4 = this.newline(ref cursor);
+                    if (r4 != null)
+                    {
+                        var len = cursor.Location - startCursor2.Location;
+                        r2 = new ParseResult<string>(startCursor2, cursor, cursor.Subject.Substring(startCursor2.Location, len));
+                    }
+                    else
+                    {
+                        cursor = startCursor2;
+                    }
+                }
+                else
+                {
+                    cursor = startCursor2;
+                }
+                if (r2 != null)
+                {
+                    l0.Add(r2.Value);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (l0.Count >= 0)
+            {
+                r1 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+            }
+            else
+            {
+                cursor = startCursor1;
+            }
+            var valueEnd = cursor;
+            var value = ValueOrDefault(r1);
+            if (r1 != null)
+            {
+                r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
+                    #line 14 "Markdown.peg"
+                            string.Join("",value)
+                    #line default
+                    );
+            }
+            else
+            {
+                cursor = startCursor0;
+            }
+            return r0;
+        }
+
+        private IParseResult<
+            #line 16 "Markdown.peg"
       string
             #line default
             > text(ref Cursor cursor)
         {
             IParseResult<string> r0 = null;
+            var storageKey = "text:" + cursor.StateKey + ":" + cursor.Location;
+            if (this.storage.ContainsKey(storageKey))
+            {
+                r0 = (IParseResult<string>)this.storage[storageKey];
+                if (r0 != null)
+                {
+                    cursor = r0.EndCursor;
+                }
+                return r0;
+            }
             var startCursor0 = cursor;
             IParseResult<IList<char>> r1 = null;
             var valueStart = cursor;
@@ -118,7 +322,7 @@ namespace
             if (r1 != null)
             {
                 r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
-                    #line 8 "Markdown.peg"
+                    #line 17 "Markdown.peg"
                  string.Join("",value)
                     #line default
                     );
@@ -127,11 +331,12 @@ namespace
             {
                 cursor = startCursor0;
             }
+            this.storage[storageKey] = r0;
             return r0;
         }
 
         private IParseResult<
-            #line 10 "Markdown.peg"
+            #line 19 "Markdown.peg"
      char
             #line default
             > let(ref Cursor cursor)
@@ -146,7 +351,7 @@ namespace
             if (r1 != null)
             {
                 r0 = this.ReturnHelper<char>(startCursor0, cursor, state =>
-                    #line 11 "Markdown.peg"
+                    #line 20 "Markdown.peg"
             value[0]
                     #line default
                     );
@@ -183,7 +388,7 @@ namespace
                 if (r2 != null)
                 {
                     throw this.ExceptionHelper(startCursor1, state =>
-                        #line 15 "Markdown.peg"
+                        #line 24 "Markdown.peg"
                          "Unexpected character '" + unexpected + "'."
                         #line default
                         );
@@ -197,7 +402,7 @@ namespace
         }
 
         private IParseResult<
-            #line 17 "Markdown.peg"
+            #line 26 "Markdown.peg"
      string
             #line default
             > any(ref Cursor cursor)
@@ -208,7 +413,7 @@ namespace
         }
 
         private IParseResult<
-            #line 21 "Markdown.peg"
+            #line 30 "Markdown.peg"
          string
             #line default
             > anyChar(ref Cursor cursor)
@@ -255,20 +460,35 @@ namespace
         private IParseResult<string> newline(ref Cursor cursor)
         {
             IParseResult<string> r0 = null;
-            var startCursor0 = cursor;
-            IParseResult<string> r1 = null;
-            r1 = this.ParseLiteral(ref cursor, "\n");
-            if (r1 != null)
+            if (r0 == null)
             {
-                r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
-                    #line 26 "Markdown.peg"
-         ""
-                    #line default
-                    );
+                r0 = this.ParseLiteral(ref cursor, "\n\r");
             }
-            else
+            if (r0 == null)
             {
-                cursor = startCursor0;
+                r0 = this.ParseLiteral(ref cursor, "\r\n");
+            }
+            if (r0 == null)
+            {
+                r0 = this.ParseLiteral(ref cursor, "\n");
+            }
+            if (r0 == null)
+            {
+                var startCursor0 = cursor;
+                IParseResult<string> r1 = null;
+                r1 = this.ParseLiteral(ref cursor, "\r");
+                if (r1 != null)
+                {
+                    r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
+                        #line 35 "Markdown.peg"
+                                  ""
+                        #line default
+                        );
+                }
+                else
+                {
+                    cursor = startCursor0;
+                }
             }
             return r0;
         }

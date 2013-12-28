@@ -11,7 +11,7 @@ namespace MarkdownProcessor
         static string test = @"
 Hello world
 ===
-This is a test";
+This is a *test*";
         static void Main(string[] args)
         {
             MarkdownParser parser = new MarkdownParser();

@@ -2,9 +2,18 @@
 @classname MarkdownParser
 
 start
-	= value:text EOF {value}
+	= value:nodes EOF {value}
 
-text <string>
+nodes <string> -memoize
+	= value:(node*) {string.Join("",value)}
+
+node <string> -memoize
+	= '*' text '*' / text;
+
+lines
+	= value:((text newline)*) {string.Join("",value)}
+
+text <string> -memoize
 	= value:(let*) {string.Join("",value)}
 
 let <char>
@@ -23,4 +32,4 @@ anyChar <string>
 
 	
 newline
-	= '\n' {""}
+	= "\n\r" / "\r\n" / '\n' / '\r' {""}
