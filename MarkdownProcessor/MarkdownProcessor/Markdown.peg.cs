@@ -1153,6 +1153,116 @@ namespace
 
         private IParseResult<
             #line 56 "Markdown.peg"
+                        ContentNode
+            #line default
+            > innerContentNotAsterik(ref Cursor cursor)
+        {
+            IParseResult<ContentNode> r0 = null;
+            var startCursor0 = cursor;
+            IParseResult<string> r1 = null;
+            var startCursor1 = cursor;
+            IParseResult<string> r2 = null;
+            r2 = this.ParseLiteral(ref cursor, "*");
+            cursor = startCursor1;
+            if (r2 == null)
+            {
+                r1 = new ParseResult<string>(cursor, cursor, string.Empty);
+            }
+            if (r1 != null)
+            {
+                IParseResult<ContentNode> r3 = null;
+                var valueStart = cursor;
+                if (r3 == null)
+                {
+                    r3 = this.plain(ref cursor);
+                }
+                if (r3 == null)
+                {
+                    r3 = this.bold(ref cursor);
+                }
+                if (r3 == null)
+                {
+                    r3 = this.italic(ref cursor);
+                }
+                var valueEnd = cursor;
+                var value = ValueOrDefault(r3);
+                if (r3 != null)
+                {
+                    r0 = this.ReturnHelper<ContentNode>(startCursor0, cursor, state =>
+                        #line 57 "Markdown.peg"
+                                       value
+                        #line default
+                        );
+                }
+                else
+                {
+                    cursor = startCursor0;
+                }
+            }
+            else
+            {
+                cursor = startCursor0;
+            }
+            return r0;
+        }
+
+        private IParseResult<
+            #line 59 "Markdown.peg"
+                           ContentNode
+            #line default
+            > innerContentNotUnderscore(ref Cursor cursor)
+        {
+            IParseResult<ContentNode> r0 = null;
+            var startCursor0 = cursor;
+            IParseResult<string> r1 = null;
+            var startCursor1 = cursor;
+            IParseResult<string> r2 = null;
+            r2 = this.ParseLiteral(ref cursor, "_");
+            cursor = startCursor1;
+            if (r2 == null)
+            {
+                r1 = new ParseResult<string>(cursor, cursor, string.Empty);
+            }
+            if (r1 != null)
+            {
+                IParseResult<ContentNode> r3 = null;
+                var valueStart = cursor;
+                if (r3 == null)
+                {
+                    r3 = this.plain(ref cursor);
+                }
+                if (r3 == null)
+                {
+                    r3 = this.bold(ref cursor);
+                }
+                if (r3 == null)
+                {
+                    r3 = this.italic(ref cursor);
+                }
+                var valueEnd = cursor;
+                var value = ValueOrDefault(r3);
+                if (r3 != null)
+                {
+                    r0 = this.ReturnHelper<ContentNode>(startCursor0, cursor, state =>
+                        #line 60 "Markdown.peg"
+                                       value
+                        #line default
+                        );
+                }
+                else
+                {
+                    cursor = startCursor0;
+                }
+            }
+            else
+            {
+                cursor = startCursor0;
+            }
+            return r0;
+        }
+
+        private IParseResult<
+            #line 62 "Markdown.peg"
         ContentNode
             #line default
             > italic(ref Cursor cursor)
@@ -1165,51 +1275,14 @@ namespace
                 r1 = this.ParseLiteral(ref cursor, "*");
                 if (r1 != null)
                 {
-                    IParseResult<IList<string>> r2 = null;
+                    IParseResult<IList<ContentNode>> r2 = null;
+                    var valueStart = cursor;
                     var startCursor1 = cursor;
-                    var l0 = new List<string>();
+                    var l0 = new List<ContentNode>();
                     while (true)
                     {
-                        IParseResult<string> r3 = null;
-                        if (r3 == null)
-                        {
-                            var startCursor2 = cursor;
-                            IParseResult<string> r4 = null;
-                            var startCursor3 = cursor;
-                            IParseResult<string> r5 = null;
-                            r5 = this.ParseLiteral(ref cursor, "*");
-                            cursor = startCursor3;
-                            if (r5 == null)
-                            {
-                                r4 = new ParseResult<string>(cursor, cursor, string.Empty);
-                            }
-                            if (r4 != null)
-                            {
-                                IParseResult<ContentNode> r6 = null;
-                                r6 = this.plain(ref cursor);
-                                if (r6 != null)
-                                {
-                                    var len = cursor.Location - startCursor2.Location;
-                                    r3 = new ParseResult<string>(startCursor2, cursor, cursor.Subject.Substring(startCursor2.Location, len));
-                                }
-                                else
-                                {
-                                    cursor = startCursor2;
-                                }
-                            }
-                            else
-                            {
-                                cursor = startCursor2;
-                            }
-                        }
-                        if (r3 == null)
-                        {
-                            r3 = this.bold(ref cursor);
-                        }
-                        if (r3 == null)
-                        {
-                            r3 = this.italic(ref cursor);
-                        }
+                        IParseResult<ContentNode> r3 = null;
+                        r3 = this.innerContentNotAsterik(ref cursor);
                         if (r3 != null)
                         {
                             l0.Add(r3.Value);
@@ -1221,20 +1294,25 @@ namespace
                     }
                     if (l0.Count >= 1)
                     {
-                        r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                        r2 = new ParseResult<IList<ContentNode>>(startCursor1, cursor, l0.AsReadOnly());
                     }
                     else
                     {
                         cursor = startCursor1;
                     }
+                    var valueEnd = cursor;
+                    var value = ValueOrDefault(r2);
                     if (r2 != null)
                     {
-                        IParseResult<string> r7 = null;
-                        r7 = this.ParseLiteral(ref cursor, "*");
-                        if (r7 != null)
+                        IParseResult<string> r4 = null;
+                        r4 = this.ParseLiteral(ref cursor, "*");
+                        if (r4 != null)
                         {
-                            var len = cursor.Location - startCursor0.Location;
-                            r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                            r0 = this.ReturnHelper<ContentNode>(startCursor0, cursor, state =>
+                                #line 63 "Markdown.peg"
+                                            new Italics(value,null)
+                                #line default
+                                );
                         }
                         else
                         {
@@ -1253,59 +1331,22 @@ namespace
             }
             if (r0 == null)
             {
-                var startCursor4 = cursor;
-                IParseResult<string> r8 = null;
-                r8 = this.ParseLiteral(ref cursor, "_");
-                if (r8 != null)
+                var startCursor2 = cursor;
+                IParseResult<string> r5 = null;
+                r5 = this.ParseLiteral(ref cursor, "_");
+                if (r5 != null)
                 {
-                    IParseResult<IList<string>> r9 = null;
-                    var startCursor5 = cursor;
-                    var l1 = new List<string>();
+                    IParseResult<IList<ContentNode>> r6 = null;
+                    var valueStart = cursor;
+                    var startCursor3 = cursor;
+                    var l1 = new List<ContentNode>();
                     while (true)
                     {
-                        IParseResult<string> r10 = null;
-                        if (r10 == null)
+                        IParseResult<ContentNode> r7 = null;
+                        r7 = this.innerContentNotUnderscore(ref cursor);
+                        if (r7 != null)
                         {
-                            var startCursor6 = cursor;
-                            IParseResult<string> r11 = null;
-                            var startCursor7 = cursor;
-                            IParseResult<string> r12 = null;
-                            r12 = this.ParseLiteral(ref cursor, "_");
-                            cursor = startCursor7;
-                            if (r12 == null)
-                            {
-                                r11 = new ParseResult<string>(cursor, cursor, string.Empty);
-                            }
-                            if (r11 != null)
-                            {
-                                IParseResult<ContentNode> r13 = null;
-                                r13 = this.plain(ref cursor);
-                                if (r13 != null)
-                                {
-                                    var len = cursor.Location - startCursor6.Location;
-                                    r10 = new ParseResult<string>(startCursor6, cursor, cursor.Subject.Substring(startCursor6.Location, len));
-                                }
-                                else
-                                {
-                                    cursor = startCursor6;
-                                }
-                            }
-                            else
-                            {
-                                cursor = startCursor6;
-                            }
-                        }
-                        if (r10 == null)
-                        {
-                            r10 = this.bold(ref cursor);
-                        }
-                        if (r10 == null)
-                        {
-                            r10 = this.italic(ref cursor);
-                        }
-                        if (r10 != null)
-                        {
-                            l1.Add(r10.Value);
+                            l1.Add(r7.Value);
                         }
                         else
                         {
@@ -1314,41 +1355,46 @@ namespace
                     }
                     if (l1.Count >= 1)
                     {
-                        r9 = new ParseResult<IList<string>>(startCursor5, cursor, l1.AsReadOnly());
+                        r6 = new ParseResult<IList<ContentNode>>(startCursor3, cursor, l1.AsReadOnly());
                     }
                     else
                     {
-                        cursor = startCursor5;
+                        cursor = startCursor3;
                     }
-                    if (r9 != null)
+                    var valueEnd = cursor;
+                    var value = ValueOrDefault(r6);
+                    if (r6 != null)
                     {
-                        IParseResult<string> r14 = null;
-                        r14 = this.ParseLiteral(ref cursor, "_");
-                        if (r14 != null)
+                        IParseResult<string> r8 = null;
+                        r8 = this.ParseLiteral(ref cursor, "_");
+                        if (r8 != null)
                         {
-                            var len = cursor.Location - startCursor4.Location;
-                            r0 = new ParseResult<string>(startCursor4, cursor, cursor.Subject.Substring(startCursor4.Location, len));
+                            r0 = this.ReturnHelper<ContentNode>(startCursor2, cursor, state =>
+                                #line 63 "Markdown.peg"
+                                                                                                                   new Italics(value,null)
+                                #line default
+                                );
                         }
                         else
                         {
-                            cursor = startCursor4;
+                            cursor = startCursor2;
                         }
                     }
                     else
                     {
-                        cursor = startCursor4;
+                        cursor = startCursor2;
                     }
                 }
                 else
                 {
-                    cursor = startCursor4;
+                    cursor = startCursor2;
                 }
             }
             return r0;
         }
 
         private IParseResult<
-            #line 59 "Markdown.peg"
+            #line 65 "Markdown.peg"
       ContentNode
             #line default
             > bold(ref Cursor cursor)
@@ -1361,51 +1407,14 @@ namespace
                 r1 = this.ParseLiteral(ref cursor, "**");
                 if (r1 != null)
                 {
-                    IParseResult<IList<string>> r2 = null;
+                    IParseResult<IList<ContentNode>> r2 = null;
+                    var valueStart = cursor;
                     var startCursor1 = cursor;
-                    var l0 = new List<string>();
+                    var l0 = new List<ContentNode>();
                     while (true)
                     {
-                        IParseResult<string> r3 = null;
-                        if (r3 == null)
-                        {
-                            var startCursor2 = cursor;
-                            IParseResult<string> r4 = null;
-                            var startCursor3 = cursor;
-                            IParseResult<string> r5 = null;
-                            r5 = this.ParseLiteral(ref cursor, "*");
-                            cursor = startCursor3;
-                            if (r5 == null)
-                            {
-                                r4 = new ParseResult<string>(cursor, cursor, string.Empty);
-                            }
-                            if (r4 != null)
-                            {
-                                IParseResult<ContentNode> r6 = null;
-                                r6 = this.plain(ref cursor);
-                                if (r6 != null)
-                                {
-                                    var len = cursor.Location - startCursor2.Location;
-                                    r3 = new ParseResult<string>(startCursor2, cursor, cursor.Subject.Substring(startCursor2.Location, len));
-                                }
-                                else
-                                {
-                                    cursor = startCursor2;
-                                }
-                            }
-                            else
-                            {
-                                cursor = startCursor2;
-                            }
-                        }
-                        if (r3 == null)
-                        {
-                            r3 = this.italic(ref cursor);
-                        }
-                        if (r3 == null)
-                        {
-                            r3 = this.bold(ref cursor);
-                        }
+                        IParseResult<ContentNode> r3 = null;
+                        r3 = this.innerContentNotAsterik(ref cursor);
                         if (r3 != null)
                         {
                             l0.Add(r3.Value);
@@ -1417,20 +1426,25 @@ namespace
                     }
                     if (l0.Count >= 1)
                     {
-                        r2 = new ParseResult<IList<string>>(startCursor1, cursor, l0.AsReadOnly());
+                        r2 = new ParseResult<IList<ContentNode>>(startCursor1, cursor, l0.AsReadOnly());
                     }
                     else
                     {
                         cursor = startCursor1;
                     }
+                    var valueEnd = cursor;
+                    var value = ValueOrDefault(r2);
                     if (r2 != null)
                     {
-                        IParseResult<string> r7 = null;
-                        r7 = this.ParseLiteral(ref cursor, "**");
-                        if (r7 != null)
+                        IParseResult<string> r4 = null;
+                        r4 = this.ParseLiteral(ref cursor, "**");
+                        if (r4 != null)
                         {
-                            var len = cursor.Location - startCursor0.Location;
-                            r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                            r0 = this.ReturnHelper<ContentNode>(startCursor0, cursor, state =>
+                                #line 66 "Markdown.peg"
+                                              new Bold(value,null)
+                                #line default
+                                );
                         }
                         else
                         {
@@ -1449,59 +1463,22 @@ namespace
             }
             if (r0 == null)
             {
-                var startCursor4 = cursor;
-                IParseResult<string> r8 = null;
-                r8 = this.ParseLiteral(ref cursor, "__");
-                if (r8 != null)
+                var startCursor2 = cursor;
+                IParseResult<string> r5 = null;
+                r5 = this.ParseLiteral(ref cursor, "__");
+                if (r5 != null)
                 {
-                    IParseResult<IList<string>> r9 = null;
-                    var startCursor5 = cursor;
-                    var l1 = new List<string>();
+                    IParseResult<IList<ContentNode>> r6 = null;
+                    var valueStart = cursor;
+                    var startCursor3 = cursor;
+                    var l1 = new List<ContentNode>();
                     while (true)
                     {
-                        IParseResult<string> r10 = null;
-                        if (r10 == null)
+                        IParseResult<ContentNode> r7 = null;
+                        r7 = this.innerContentNotUnderscore(ref cursor);
+                        if (r7 != null)
                         {
-                            var startCursor6 = cursor;
-                            IParseResult<string> r11 = null;
-                            var startCursor7 = cursor;
-                            IParseResult<string> r12 = null;
-                            r12 = this.ParseLiteral(ref cursor, "_");
-                            cursor = startCursor7;
-                            if (r12 == null)
-                            {
-                                r11 = new ParseResult<string>(cursor, cursor, string.Empty);
-                            }
-                            if (r11 != null)
-                            {
-                                IParseResult<ContentNode> r13 = null;
-                                r13 = this.plain(ref cursor);
-                                if (r13 != null)
-                                {
-                                    var len = cursor.Location - startCursor6.Location;
-                                    r10 = new ParseResult<string>(startCursor6, cursor, cursor.Subject.Substring(startCursor6.Location, len));
-                                }
-                                else
-                                {
-                                    cursor = startCursor6;
-                                }
-                            }
-                            else
-                            {
-                                cursor = startCursor6;
-                            }
-                        }
-                        if (r10 == null)
-                        {
-                            r10 = this.italic(ref cursor);
-                        }
-                        if (r10 == null)
-                        {
-                            r10 = this.bold(ref cursor);
-                        }
-                        if (r10 != null)
-                        {
-                            l1.Add(r10.Value);
+                            l1.Add(r7.Value);
                         }
                         else
                         {
@@ -1510,47 +1487,69 @@ namespace
                     }
                     if (l1.Count >= 1)
                     {
-                        r9 = new ParseResult<IList<string>>(startCursor5, cursor, l1.AsReadOnly());
+                        r6 = new ParseResult<IList<ContentNode>>(startCursor3, cursor, l1.AsReadOnly());
                     }
                     else
                     {
-                        cursor = startCursor5;
+                        cursor = startCursor3;
                     }
-                    if (r9 != null)
+                    var valueEnd = cursor;
+                    var value = ValueOrDefault(r6);
+                    if (r6 != null)
                     {
-                        IParseResult<string> r14 = null;
-                        r14 = this.ParseLiteral(ref cursor, "__");
-                        if (r14 != null)
+                        IParseResult<string> r8 = null;
+                        r8 = this.ParseLiteral(ref cursor, "__");
+                        if (r8 != null)
                         {
-                            var len = cursor.Location - startCursor4.Location;
-                            r0 = new ParseResult<string>(startCursor4, cursor, cursor.Subject.Substring(startCursor4.Location, len));
+                            r0 = this.ReturnHelper<ContentNode>(startCursor2, cursor, state =>
+                                #line 66 "Markdown.peg"
+                                                                                                                    new Bold(value,null)
+                                #line default
+                                );
                         }
                         else
                         {
-                            cursor = startCursor4;
+                            cursor = startCursor2;
                         }
                     }
                     else
                     {
-                        cursor = startCursor4;
+                        cursor = startCursor2;
                     }
                 }
                 else
                 {
-                    cursor = startCursor4;
+                    cursor = startCursor2;
                 }
             }
             return r0;
         }
 
         private IParseResult<
-            #line 62 "Markdown.peg"
+            #line 68 "Markdown.peg"
        ContentNode
             #line default
             > plain(ref Cursor cursor)
         {
             IParseResult<ContentNode> r0 = null;
-            r0 = this.anyChar(ref cursor);
+            var startCursor0 = cursor;
+            IParseResult<string> r1 = null;
+            var valueStart = cursor;
+            r1 = this.anyChar(ref cursor);
+            var valueEnd = cursor;
+            var value = ValueOrDefault(r1);
+            if (r1 != null)
+            {
+                r0 = this.ReturnHelper<ContentNode>(startCursor0, cursor, state =>
+                    #line 69 "Markdown.peg"
+                  new Text(null,value)
+                    #line default
+                    );
+            }
+            else
+            {
+                cursor = startCursor0;
+            }
             return r0;
         }
 
@@ -1579,7 +1578,7 @@ namespace
                 if (r2 != null)
                 {
                     throw this.ExceptionHelper(startCursor1, state =>
-                        #line 67 "Markdown.peg"
+                        #line 73 "Markdown.peg"
                          "Unexpected character '" + unexpected + "'."
                         #line default
                         );
@@ -1593,7 +1592,7 @@ namespace
         }
 
         private IParseResult<
-            #line 69 "Markdown.peg"
+            #line 75 "Markdown.peg"
      string
             #line default
             > any(ref Cursor cursor)
@@ -1604,7 +1603,7 @@ namespace
         }
 
         private IParseResult<
-            #line 73 "Markdown.peg"
+            #line 79 "Markdown.peg"
          string
             #line default
             > anyChar(ref Cursor cursor)

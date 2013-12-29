@@ -53,14 +53,20 @@ content <ContentNode>
 link <ContentNode>
 	= '[' text:((!']' anyChar)+) "](" link:((!')' anyChar)*) ')' { new Link(null,Flatten(text),Flatten(link))}
 
+innerContentNotAsterik <ContentNode>
+	= !'*' value:(plain / bold / italic) {value}
+
+innerContentNotUnderscore <ContentNode>
+	= !'_' value:(plain / bold / italic) {value}
+
 italic <ContentNode>
-	= '*' (!'*' plain / bold / italic)+ '*' / '_' (!'_' plain / bold / italic)+ '_'
+	= '*' value:(innerContentNotAsterik+) '*' {new Italics(value,null)} / '_' value:(innerContentNotUnderscore+) '_' {new Italics(value,null)}
 
 bold <ContentNode>
-	= "**" (!'*' plain / italic / bold)+ "**" / "__" (!'_' plain / italic / bold)+ "__"
+	= '**' value:(innerContentNotAsterik+) '**' {new Bold(value,null)} / '__' value:(innerContentNotUnderscore+) '__' {new Bold(value,null)}
 
 plain <ContentNode>
-	= anyChar;
+	= value:anyChar {new Text(null,value)}
 
 EOF
   = !.
