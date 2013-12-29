@@ -8,7 +8,7 @@ namespace MarkdownProcessor
 {
     partial class MarkdownParser
     {
-        public List<T> FlattenList<T>(IEnumerable<IEnumerable<T>> listOfList)
+        public IList<T> FlattenList<T>(IEnumerable<IEnumerable<T>> listOfList)
         {
             return Flatten(listOfList).ToList();
         }

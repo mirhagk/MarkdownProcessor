@@ -37,11 +37,11 @@ namespace
         /// </summary>
         /// <param name="subject">The parsing subject.</param>
         /// <param name="fileName">The optional file name to use in error messages.</param>
-        /// <returns>The <see cref="List&lt;Node&gt;" /> parsed from <paramref name="subject" />.</returns>
+        /// <returns>The <see cref="IList&lt;Node&gt;" /> parsed from <paramref name="subject" />.</returns>
         /// <exception cref="FormatException">
         ///  Thrown when parsing fails against <paramref name="subject"/>.  The exception's <code>Data["cursor"]</code> will be set with the cursor where the fatal error occurred.
         /// </exception>
-        public List<Node> Parse(string subject, string fileName = null)
+        public IList<Node> Parse(string subject, string fileName = null)
         {
             var cursor = new Cursor(subject, 0, fileName);
             var result = this.start(ref cursor);
@@ -54,13 +54,13 @@ namespace
 
         private IParseResult<
             #line 5 "Markdown.peg"
-       List<Node>
+       IList<Node>
             #line default
             > start(ref Cursor cursor)
         {
-            IParseResult<List<Node>> r0 = null;
+            IParseResult<IList<Node>> r0 = null;
             var startCursor0 = cursor;
-            IParseResult<List<Node>> r1 = null;
+            IParseResult<IList<Node>> r1 = null;
             var valueStart = cursor;
             r1 = this.document(ref cursor);
             var valueEnd = cursor;
@@ -71,7 +71,7 @@ namespace
                 r2 = this.EOF(ref cursor);
                 if (r2 != null)
                 {
-                    r0 = this.ReturnHelper<List<Node>>(startCursor0, cursor, state =>
+                    r0 = this.ReturnHelper<IList<Node>>(startCursor0, cursor, state =>
                         #line 6 "Markdown.peg"
                        value
                         #line default
@@ -91,11 +91,11 @@ namespace
 
         private IParseResult<
             #line 8 "Markdown.peg"
-          List<Node>
+          IList<Node>
             #line default
             > document(ref Cursor cursor)
         {
-            IParseResult<List<Node>> r0 = null;
+            IParseResult<IList<Node>> r0 = null;
             var startCursor0 = cursor;
             var l0 = new List<Node>();
             while (true)
@@ -152,13 +152,13 @@ namespace
         {
             IParseResult<Node> r0 = null;
             var startCursor0 = cursor;
-            IParseResult<IList<List<ContentNode>>> r1 = null;
+            IParseResult<IList<IList<ContentNode>>> r1 = null;
             var valueStart = cursor;
             var startCursor1 = cursor;
-            var l0 = new List<List<ContentNode>>();
+            var l0 = new List<IList<ContentNode>>();
             while (true)
             {
-                IParseResult<List<ContentNode>> r2 = null;
+                IParseResult<IList<ContentNode>> r2 = null;
                 r2 = this.paraHelper(ref cursor);
                 if (r2 != null)
                 {
@@ -171,7 +171,7 @@ namespace
             }
             if (l0.Count >= 1)
             {
-                r1 = new ParseResult<IList<List<ContentNode>>>(startCursor1, cursor, l0.AsReadOnly());
+                r1 = new ParseResult<IList<IList<ContentNode>>>(startCursor1, cursor, l0.AsReadOnly());
             }
             else
             {
@@ -196,11 +196,11 @@ namespace
 
         private IParseResult<
             #line 17 "Markdown.peg"
-            List<ContentNode>
+            IList<ContentNode>
             #line default
             > paraHelper(ref Cursor cursor)
         {
-            IParseResult<List<ContentNode>> r0 = null;
+            IParseResult<IList<ContentNode>> r0 = null;
             var startCursor0 = cursor;
             IParseResult<string> r1 = null;
             var startCursor1 = cursor;
@@ -268,7 +268,7 @@ namespace
                     }
                     if (r5 != null)
                     {
-                        r0 = this.ReturnHelper<List<ContentNode>>(startCursor0, cursor, state =>
+                        r0 = this.ReturnHelper<IList<ContentNode>>(startCursor0, cursor, state =>
                             #line 18 "Markdown.peg"
                                         value
                             #line default
@@ -298,21 +298,35 @@ namespace
             > linebreak(ref Cursor cursor)
         {
             IParseResult<Node> r0 = null;
-            if (r0 == null)
+            var startCursor0 = cursor;
+            IParseResult<string> r1 = null;
+            if (r1 == null)
             {
-                r0 = this.ParseLiteral(ref cursor, "\n\r");
+                r1 = this.ParseLiteral(ref cursor, "\n\r");
             }
-            if (r0 == null)
+            if (r1 == null)
             {
-                r0 = this.ParseLiteral(ref cursor, "\r\n");
+                r1 = this.ParseLiteral(ref cursor, "\r\n");
             }
-            if (r0 == null)
+            if (r1 == null)
             {
-                r0 = this.ParseLiteral(ref cursor, "\r");
+                r1 = this.ParseLiteral(ref cursor, "\r");
             }
-            if (r0 == null)
+            if (r1 == null)
             {
-                r0 = this.ParseLiteral(ref cursor, "\n");
+                r1 = this.ParseLiteral(ref cursor, "\n");
+            }
+            if (r1 != null)
+            {
+                r0 = this.ReturnHelper<Node>(startCursor0, cursor, state =>
+                    #line 21 "Markdown.peg"
+                                     new LineBreakNode()
+                    #line default
+                    );
+            }
+            else
+            {
+                cursor = startCursor0;
             }
             return r0;
         }
@@ -344,6 +358,7 @@ namespace
             IParseResult<Node> r0 = null;
             var startCursor0 = cursor;
             IParseResult<IList<string>> r1 = null;
+            var levelStart = cursor;
             var startCursor1 = cursor;
             var l0 = new List<string>();
             while (true)
@@ -367,46 +382,22 @@ namespace
             {
                 cursor = startCursor1;
             }
+            var levelEnd = cursor;
+            var level = ValueOrDefault(r1);
             if (r1 != null)
             {
                 IParseResult<string> r3 = null;
                 r3 = this.spaces(ref cursor);
                 if (r3 != null)
                 {
-                    IParseResult<IList<string>> r4 = null;
+                    IParseResult<IList<ContentNode>> r4 = null;
+                    var valueStart = cursor;
                     var startCursor2 = cursor;
-                    var l1 = new List<string>();
+                    var l1 = new List<ContentNode>();
                     while (true)
                     {
-                        IParseResult<string> r5 = null;
-                        var startCursor3 = cursor;
-                        IParseResult<string> r6 = null;
-                        var startCursor4 = cursor;
-                        IParseResult<string> r7 = null;
-                        r7 = this.ParseLiteral(ref cursor, "#");
-                        cursor = startCursor4;
-                        if (r7 == null)
-                        {
-                            r6 = new ParseResult<string>(cursor, cursor, string.Empty);
-                        }
-                        if (r6 != null)
-                        {
-                            IParseResult<ContentNode> r8 = null;
-                            r8 = this.content(ref cursor);
-                            if (r8 != null)
-                            {
-                                var len = cursor.Location - startCursor3.Location;
-                                r5 = new ParseResult<string>(startCursor3, cursor, cursor.Subject.Substring(startCursor3.Location, len));
-                            }
-                            else
-                            {
-                                cursor = startCursor3;
-                            }
-                        }
-                        else
-                        {
-                            cursor = startCursor3;
-                        }
+                        IParseResult<ContentNode> r5 = null;
+                        r5 = this.atxHeadingHelper(ref cursor);
                         if (r5 != null)
                         {
                             l1.Add(r5.Value);
@@ -418,24 +409,26 @@ namespace
                     }
                     if (l1.Count >= 0)
                     {
-                        r4 = new ParseResult<IList<string>>(startCursor2, cursor, l1.AsReadOnly());
+                        r4 = new ParseResult<IList<ContentNode>>(startCursor2, cursor, l1.AsReadOnly());
                     }
                     else
                     {
                         cursor = startCursor2;
                     }
+                    var valueEnd = cursor;
+                    var value = ValueOrDefault(r4);
                     if (r4 != null)
                     {
-                        IParseResult<IList<string>> r9 = null;
-                        var startCursor5 = cursor;
+                        IParseResult<IList<string>> r6 = null;
+                        var startCursor3 = cursor;
                         var l2 = new List<string>();
                         while (true)
                         {
-                            IParseResult<string> r10 = null;
-                            r10 = this.ParseLiteral(ref cursor, "#");
-                            if (r10 != null)
+                            IParseResult<string> r7 = null;
+                            r7 = this.ParseLiteral(ref cursor, "#");
+                            if (r7 != null)
                             {
-                                l2.Add(r10.Value);
+                                l2.Add(r7.Value);
                             }
                             else
                             {
@@ -444,24 +437,24 @@ namespace
                         }
                         if (l2.Count >= 0)
                         {
-                            r9 = new ParseResult<IList<string>>(startCursor5, cursor, l2.AsReadOnly());
+                            r6 = new ParseResult<IList<string>>(startCursor3, cursor, l2.AsReadOnly());
                         }
                         else
                         {
-                            cursor = startCursor5;
+                            cursor = startCursor3;
                         }
-                        if (r9 != null)
+                        if (r6 != null)
                         {
-                            IParseResult<IList<string>> r11 = null;
-                            var startCursor6 = cursor;
+                            IParseResult<IList<string>> r8 = null;
+                            var startCursor4 = cursor;
                             var l3 = new List<string>();
                             while (l3.Count < 1)
                             {
-                                IParseResult<string> r12 = null;
-                                r12 = this.newlines(ref cursor);
-                                if (r12 != null)
+                                IParseResult<string> r9 = null;
+                                r9 = this.newlines(ref cursor);
+                                if (r9 != null)
                                 {
-                                    l3.Add(r12.Value);
+                                    l3.Add(r9.Value);
                                 }
                                 else
                                 {
@@ -470,16 +463,19 @@ namespace
                             }
                             if (l3.Count >= 0)
                             {
-                                r11 = new ParseResult<IList<string>>(startCursor6, cursor, l3.AsReadOnly());
+                                r8 = new ParseResult<IList<string>>(startCursor4, cursor, l3.AsReadOnly());
                             }
                             else
                             {
-                                cursor = startCursor6;
+                                cursor = startCursor4;
                             }
-                            if (r11 != null)
+                            if (r8 != null)
                             {
-                                var len = cursor.Location - startCursor0.Location;
-                                r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                                r0 = this.ReturnHelper<Node>(startCursor0, cursor, state =>
+                                    #line 27 "Markdown.peg"
+                                                                                new HeadingNode(value,level.Count)
+                                    #line default
+                                    );
                             }
                             else
                             {
@@ -510,6 +506,50 @@ namespace
 
         private IParseResult<
             #line 29 "Markdown.peg"
+                  ContentNode
+            #line default
+            > atxHeadingHelper(ref Cursor cursor)
+        {
+            IParseResult<ContentNode> r0 = null;
+            var startCursor0 = cursor;
+            IParseResult<string> r1 = null;
+            var startCursor1 = cursor;
+            IParseResult<string> r2 = null;
+            r2 = this.ParseLiteral(ref cursor, "#");
+            cursor = startCursor1;
+            if (r2 == null)
+            {
+                r1 = new ParseResult<string>(cursor, cursor, string.Empty);
+            }
+            if (r1 != null)
+            {
+                IParseResult<ContentNode> r3 = null;
+                var valueStart = cursor;
+                r3 = this.content(ref cursor);
+                var valueEnd = cursor;
+                var value = ValueOrDefault(r3);
+                if (r3 != null)
+                {
+                    r0 = this.ReturnHelper<ContentNode>(startCursor0, cursor, state =>
+                        #line 30 "Markdown.peg"
+                        value
+                        #line default
+                        );
+                }
+                else
+                {
+                    cursor = startCursor0;
+                }
+            }
+            else
+            {
+                cursor = startCursor0;
+            }
+            return r0;
+        }
+
+        private IParseResult<
+            #line 32 "Markdown.peg"
                     string
             #line default
             > headingMatchSymbol(ref Cursor cursor)
@@ -520,7 +560,7 @@ namespace
         }
 
         private IParseResult<
-            #line 32 "Markdown.peg"
+            #line 35 "Markdown.peg"
                Node
             #line default
             > setextHeading(ref Cursor cursor)
@@ -591,7 +631,7 @@ namespace
         }
 
         private IParseResult<
-            #line 35 "Markdown.peg"
+            #line 38 "Markdown.peg"
               char
             #line default
             > setextBottom(ref Cursor cursor)
@@ -787,7 +827,7 @@ namespace
         }
 
         private IParseResult<
-            #line 38 "Markdown.peg"
+            #line 41 "Markdown.peg"
         string
             #line default
             > spaces(ref Cursor cursor)
@@ -821,7 +861,7 @@ namespace
             if (r1 != null)
             {
                 r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
-                    #line 39 "Markdown.peg"
+                    #line 42 "Markdown.peg"
          ""
                     #line default
                     );
@@ -834,7 +874,7 @@ namespace
         }
 
         private IParseResult<
-            #line 41 "Markdown.peg"
+            #line 44 "Markdown.peg"
           string
             #line default
             > newlines(ref Cursor cursor)
@@ -868,7 +908,7 @@ namespace
             if (r1 != null)
             {
                 r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
-                    #line 42 "Markdown.peg"
+                    #line 45 "Markdown.peg"
              ""
                     #line default
                     );
@@ -881,7 +921,7 @@ namespace
         }
 
         private IParseResult<
-            #line 44 "Markdown.peg"
+            #line 47 "Markdown.peg"
          string
             #line default
             > newline(ref Cursor cursor)
@@ -893,7 +933,7 @@ namespace
             if (r1 != null)
             {
                 r0 = this.ReturnHelper<string>(startCursor0, cursor, state =>
-                    #line 45 "Markdown.peg"
+                    #line 48 "Markdown.peg"
               ""
                     #line default
                     );
@@ -906,7 +946,7 @@ namespace
         }
 
         private IParseResult<
-            #line 47 "Markdown.peg"
+            #line 50 "Markdown.peg"
          ContentNode
             #line default
             > content(ref Cursor cursor)
@@ -932,7 +972,7 @@ namespace
         }
 
         private IParseResult<
-            #line 50 "Markdown.peg"
+            #line 53 "Markdown.peg"
       ContentNode
             #line default
             > link(ref Cursor cursor)
@@ -1088,7 +1128,7 @@ namespace
         }
 
         private IParseResult<
-            #line 53 "Markdown.peg"
+            #line 56 "Markdown.peg"
         ContentNode
             #line default
             > italic(ref Cursor cursor)
@@ -1284,7 +1324,7 @@ namespace
         }
 
         private IParseResult<
-            #line 56 "Markdown.peg"
+            #line 59 "Markdown.peg"
       ContentNode
             #line default
             > bold(ref Cursor cursor)
@@ -1480,7 +1520,7 @@ namespace
         }
 
         private IParseResult<
-            #line 59 "Markdown.peg"
+            #line 62 "Markdown.peg"
        ContentNode
             #line default
             > plain(ref Cursor cursor)
@@ -1515,7 +1555,7 @@ namespace
                 if (r2 != null)
                 {
                     throw this.ExceptionHelper(startCursor1, state =>
-                        #line 64 "Markdown.peg"
+                        #line 67 "Markdown.peg"
                          "Unexpected character '" + unexpected + "'."
                         #line default
                         );
@@ -1529,7 +1569,7 @@ namespace
         }
 
         private IParseResult<
-            #line 66 "Markdown.peg"
+            #line 69 "Markdown.peg"
      string
             #line default
             > any(ref Cursor cursor)
@@ -1540,7 +1580,7 @@ namespace
         }
 
         private IParseResult<
-            #line 70 "Markdown.peg"
+            #line 73 "Markdown.peg"
          string
             #line default
             > anyChar(ref Cursor cursor)

@@ -8,26 +8,26 @@ namespace MarkdownProcessor.Nodes
 {
     public class ContentNode
     {
-        public List<ContentNode> innerNodes;
+        public IList<ContentNode> innerNodes;
         public string text;
-        public ContentNode(List<ContentNode> innerNodes, string text)
+        public ContentNode(IList<ContentNode> innerNodes, string text)
         {
             this.innerNodes = innerNodes;
             this.text = text;
         }
     }
     public class Text : ContentNode {
-        public Text(List<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
+        public Text(IList<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
     }
     public class Bold : ContentNode { 
-    public Bold(List<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
+    public Bold(IList<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
     }
     public class Italics : ContentNode { 
-    public Italics(List<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
+    public Italics(IList<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
     }
     public class Link : ContentNode
     {
-        public Link(List<ContentNode> innerNodes, string text, string source)
+        public Link(IList<ContentNode> innerNodes, string text, string source)
             : base(innerNodes, text)
         {
             this.source = source;
@@ -37,7 +37,7 @@ namespace MarkdownProcessor.Nodes
     public class Node
     {
         public List<ContentNode> content;
-        public Node(List<ContentNode> content)
+        public Node(IList<ContentNode> content)
         {
             //fold the content nodes if they match
             this.content = new List<ContentNode>();
@@ -76,6 +76,19 @@ namespace MarkdownProcessor.Nodes
     }
     public class ParagraphNode : Node
     {
-        public ParagraphNode(List<ContentNode> content) : base(content) { }
+        public ParagraphNode(IList<ContentNode> content) : base(content) { }
+    }
+    public class LineBreakNode : Node
+    {
+        public LineBreakNode() : base(new List<ContentNode>()) { }
+    }
+    public class HeadingNode : Node
+    {
+        public int Level;
+        public HeadingNode(IList<ContentNode> content, int level)
+            : base(content)
+        {
+            Level = level;
+        }
     }
 }

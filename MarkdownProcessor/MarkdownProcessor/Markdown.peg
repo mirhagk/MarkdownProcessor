@@ -2,10 +2,10 @@
 @classname MarkdownParser
 @using MarkdownProcessor.Nodes
 
-start <List<Node>>
+start <IList<Node>>
 	= value:document EOF {value}
 
-document <List<Node>>
+document <IList<Node>>
 	= (docPiece / paragraph / linebreak)*
 
 docPiece <Node>
@@ -14,17 +14,20 @@ docPiece <Node>
 paragraph <Node>
 	= value:(paraHelper+) { new ParagraphNode(FlattenList(value))}
 
-paraHelper <List<ContentNode>>
+paraHelper <IList<ContentNode>>
 	= !docPiece value:(content+) newline? {value}
 
 linebreak <Node>
-	= ("\n\r" / "\r\n" / '\r' / '\n')
+	= ("\n\r" / "\r\n" / '\r' / '\n') { new LineBreakNode()}
 
 heading <Node>
 	= atxHeading / setextHeading
 
 atxHeading <Node>
-	= headingMatchSymbol+ spaces (!('#') content)* '#'* newlines?
+	= level:(headingMatchSymbol+) spaces value:(atxHeadingHelper*) '#'* newlines? {new HeadingNode(value,level.Count)}
+
+atxHeadingHelper <ContentNode>
+	= !'#' value:content { value}
 
 headingMatchSymbol <string>
 	= '#'
