@@ -74,4 +74,8 @@ namespace MarkdownProcessor.Nodes
             return this.GetType().Name.Split('+').Last() + "\n\t" + DotDotDot(text, 50);
         }
     }
+    public class ParagraphNode : Node
+    {
+        public ParagraphNode(List<ContentNode> content) : base(content) { }
+    }
 }

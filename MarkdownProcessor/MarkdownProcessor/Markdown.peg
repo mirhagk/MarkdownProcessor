@@ -2,7 +2,7 @@
 @classname MarkdownParser
 @using MarkdownProcessor.Nodes
 
-start
+start <List<Node>>
 	= value:document EOF {value}
 
 document <List<Node>>
@@ -12,7 +12,10 @@ docPiece <Node>
 	= heading
 
 paragraph <Node>
-	= (!docPiece content+ newline?)+
+	= value:(paraHelper+) { new ParagraphNode(FlattenList(value))}
+
+paraHelper <List<ContentNode>>
+	= !docPiece value:(content+) newline? {value}
 
 linebreak <Node>
 	= ("\n\r" / "\r\n" / '\r' / '\n')
