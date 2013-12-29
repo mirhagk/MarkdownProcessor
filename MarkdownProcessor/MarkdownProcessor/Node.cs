@@ -12,7 +12,7 @@ namespace MarkdownProcessor.Nodes
         public string text;
         public ContentNode(IList<ContentNode> innerNodes, string text)
         {
-            this.innerNodes = innerNodes;
+            this.innerNodes = innerNodes ?? new List<ContentNode>();
             this.text = text;
         }
     }

@@ -999,6 +999,7 @@ namespace
             if (r1 != null)
             {
                 IParseResult<IList<string>> r2 = null;
+                var textStart = cursor;
                 var startCursor1 = cursor;
                 var l0 = new List<string>();
                 while (true)
@@ -1049,6 +1050,8 @@ namespace
                 {
                     cursor = startCursor1;
                 }
+                var textEnd = cursor;
+                var text = ValueOrDefault(r2);
                 if (r2 != null)
                 {
                     IParseResult<string> r7 = null;
@@ -1056,6 +1059,7 @@ namespace
                     if (r7 != null)
                     {
                         IParseResult<IList<string>> r8 = null;
+                        var linkStart = cursor;
                         var startCursor4 = cursor;
                         var l1 = new List<string>();
                         while (true)
@@ -1106,14 +1110,19 @@ namespace
                         {
                             cursor = startCursor4;
                         }
+                        var linkEnd = cursor;
+                        var link = ValueOrDefault(r8);
                         if (r8 != null)
                         {
                             IParseResult<string> r13 = null;
                             r13 = this.ParseLiteral(ref cursor, ")");
                             if (r13 != null)
                             {
-                                var len = cursor.Location - startCursor0.Location;
-                                r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                                r0 = this.ReturnHelper<ContentNode>(startCursor0, cursor, state =>
+                                    #line 54 "Markdown.peg"
+                                                                new Link(null,Flatten(text),Flatten(link))
+                                    #line default
+                                    );
                             }
                             else
                             {

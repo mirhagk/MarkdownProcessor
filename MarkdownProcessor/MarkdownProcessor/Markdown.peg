@@ -51,7 +51,7 @@ content <ContentNode>
 	= bold / italic / link / plain
 
 link <ContentNode>
-	= '[' (!']' anyChar)+ "](" (!')' anyChar)* ')'
+	= '[' text:((!']' anyChar)+) "](" link:((!')' anyChar)*) ')' { new Link(null,Flatten(text),Flatten(link))}
 
 italic <ContentNode>
 	= '*' (!'*' plain / bold / italic)+ '*' / '_' (!'_' plain / bold / italic)+ '_'
