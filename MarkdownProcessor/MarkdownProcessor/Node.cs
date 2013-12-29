@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MarkdownProcessor.Nodes
 {
-    public class ContentNode
+    public abstract class ContentNode
     {
         public IList<ContentNode> innerNodes;
         public string text;
@@ -34,35 +34,37 @@ namespace MarkdownProcessor.Nodes
         }
         public string source;
     }
-    public class Node
+    public abstract class Node
     {
+        public static List<ContentNode> FoldContentNodes(IList<ContentNode> content)
+        {
+            var result = content.Take(1).ToList();
+            ContentNode lastNode = content.FirstOrDefault();
+            foreach (var node in content.Skip(1))
+            {
+                if (lastNode.GetType() == node.GetType())
+                {
+                    result.RemoveAt(result.Count - 1);
+                    var innerNodes = lastNode.innerNodes.Union(node.innerNodes).ToList();
+                    var text = lastNode.text + node.text;
+                    lastNode = lastNode.GetType().GetConstructor(new Type[] { typeof(IList<ContentNode>), typeof(string) }).Invoke(new object[] { innerNodes, text }) as ContentNode;
+                }
+                else
+                    lastNode = node;
+                result.Add(lastNode);
+            }
+            //Go through the resulting nodes and fold their nodes as well
+            foreach (var node in result)
+            {
+                node.innerNodes = FoldContentNodes(node.innerNodes);
+            }
+            return result;
+        }
         public List<ContentNode> content;
         public Node(IList<ContentNode> content)
         {
             //fold the content nodes if they match
-            this.content = new List<ContentNode>();
-            ContentNode lastNode = content.FirstOrDefault();
-            this.content.AddRange(content.Take(1));
-            foreach (var node in content.Skip(1))
-            {
-                if (lastNode == null)
-                {
-                    this.content.Add(node);
-                    lastNode = node;
-                }
-                else
-                    if (lastNode.GetType() == node.GetType())
-                    {
-                        this.content.RemoveAt(this.content.Count - 1);
-                        lastNode = new ContentNode(lastNode.innerNodes.Union(node.innerNodes).ToList(), lastNode.text + node.text);
-                        this.content.Add(lastNode);
-                    }
-                    else
-                    {
-                        this.content.Add(node);
-                        lastNode = node;
-                    }
-            }
+            this.content = FoldContentNodes(content);
         }
         public string DotDotDot(string text, int length)
         {
