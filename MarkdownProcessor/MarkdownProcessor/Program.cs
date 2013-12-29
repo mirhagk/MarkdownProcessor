@@ -15,7 +15,8 @@ This is a *test*";
         static void Main(string[] args)
         {
             MarkdownParser parser = new MarkdownParser();
-            Console.WriteLine(parser.Parse(test));
+            var result = (parser.Parse(test));
+            Console.WriteLine(result);
             Console.ReadKey();
         }
     }
