@@ -33,10 +33,10 @@ headingMatchSymbol <string>
 	= '#'
 
 setextHeading <Node>
-	= content* newline setextBottom newline
+	= value:(content*) newline bottomType:setextBottom newline {new HeadingNode(value,bottomType=='='?1:2)}
 
 setextBottom <char>
-	= '=' spaces '=' spaces (spaces '=')* / '-' spaces '-' spaces (spaces '-')*
+	= '=' spaces '=' spaces (spaces '=')*  { '='} / '-' spaces '-' spaces (spaces '-')* {'-'}
 
 spaces <string>
 	=	' '* {""}

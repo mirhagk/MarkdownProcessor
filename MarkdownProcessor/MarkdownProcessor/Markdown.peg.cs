@@ -568,6 +568,7 @@ namespace
             IParseResult<Node> r0 = null;
             var startCursor0 = cursor;
             IParseResult<IList<ContentNode>> r1 = null;
+            var valueStart = cursor;
             var startCursor1 = cursor;
             var l0 = new List<ContentNode>();
             while (true)
@@ -591,6 +592,8 @@ namespace
             {
                 cursor = startCursor1;
             }
+            var valueEnd = cursor;
+            var value = ValueOrDefault(r1);
             if (r1 != null)
             {
                 IParseResult<string> r3 = null;
@@ -598,15 +601,21 @@ namespace
                 if (r3 != null)
                 {
                     IParseResult<char> r4 = null;
+                    var bottomTypeStart = cursor;
                     r4 = this.setextBottom(ref cursor);
+                    var bottomTypeEnd = cursor;
+                    var bottomType = ValueOrDefault(r4);
                     if (r4 != null)
                     {
                         IParseResult<string> r5 = null;
                         r5 = this.newline(ref cursor);
                         if (r5 != null)
                         {
-                            var len = cursor.Location - startCursor0.Location;
-                            r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                            r0 = this.ReturnHelper<Node>(startCursor0, cursor, state =>
+                                #line 36 "Markdown.peg"
+                                                             new HeadingNode(value,bottomType=='='?1:2)
+                                #line default
+                                );
                         }
                         else
                         {
@@ -702,8 +711,11 @@ namespace
                                 }
                                 if (r5 != null)
                                 {
-                                    var len = cursor.Location - startCursor0.Location;
-                                    r0 = new ParseResult<string>(startCursor0, cursor, cursor.Subject.Substring(startCursor0.Location, len));
+                                    r0 = this.ReturnHelper<char>(startCursor0, cursor, state =>
+                                        #line 39 "Markdown.peg"
+                                          '='
+                                        #line default
+                                        );
                                 }
                                 else
                                 {
@@ -795,8 +807,11 @@ namespace
                                 }
                                 if (r13 != null)
                                 {
-                                    var len = cursor.Location - startCursor3.Location;
-                                    r0 = new ParseResult<string>(startCursor3, cursor, cursor.Subject.Substring(startCursor3.Location, len));
+                                    r0 = this.ReturnHelper<char>(startCursor3, cursor, state =>
+                                        #line 39 "Markdown.peg"
+                                                                                      '-'
+                                        #line default
+                                        );
                                 }
                                 else
                                 {
