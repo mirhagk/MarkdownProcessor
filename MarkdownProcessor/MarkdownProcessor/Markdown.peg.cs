@@ -1598,7 +1598,7 @@ namespace
             > any(ref Cursor cursor)
         {
             IParseResult<string> r0 = null;
-            r0 = this.ParseClass(ref cursor, "\'\'\0\0\'\'....\'\'\uffff\uffff\'\'");
+            r0 = this.ParseClass(ref cursor, "\0\uffff");
             return r0;
         }
 

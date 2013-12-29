@@ -73,7 +73,7 @@ EOF
   / unexpected:. #ERROR{ "Unexpected character '" + unexpected + "'." }
 
 any <string>
-	= ['\u0000'..'\uFFFF']
+	= [\u0000-\uFFFF]
 
 	
 anyChar <string>
