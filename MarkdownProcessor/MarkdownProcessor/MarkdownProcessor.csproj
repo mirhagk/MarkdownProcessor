@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="MarkdownParser.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="Output\IOutputFormat.cs" />
+    <Compile Include="Output\LaTeX.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
