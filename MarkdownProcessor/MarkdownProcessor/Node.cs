@@ -15,6 +15,12 @@ namespace MarkdownProcessor.Nodes
             this.innerNodes = innerNodes ?? new List<ContentNode>();
             this.text = text;
         }
+        public override string ToString()
+        {
+            if (text == null)
+                return string.Join("", innerNodes.Select((x) => x.ToString()));
+            return text;
+        }
     }
     public class Text : ContentNode {
         public Text(IList<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
@@ -72,7 +78,7 @@ namespace MarkdownProcessor.Nodes
         }
         public override string ToString()
         {
-            var text = string.Join("", content.Select((x) => x.text));
+            var text = string.Join("", content.Select((x) => x.ToString()));
             return this.GetType().Name.Split('+').Last() + "\n\t" + DotDotDot(text, 50);
         }
     }

@@ -16,7 +16,11 @@ This is a *test*";
         {
             MarkdownParser parser = new MarkdownParser();
             var result = (parser.Parse(test));
-            Console.WriteLine(result);
+            foreach (var node in result)
+            {
+                Console.WriteLine(node);
+            }
+            Console.WriteLine("DONE. Press any key to quit");
             Console.ReadKey();
         }
     }
