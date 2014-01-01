@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="MarkdownParser.cs" />
     <Compile Include="Node.cs" />
-    <Compile Include="Output\IOutputFormat.cs" />
+    <Compile Include="Output\OutputFormat.cs" />
     <Compile Include="Output\LaTeX.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +55,9 @@
     <None Include="App.config" />
     <PegGrammar Include="Markdown.peg" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\LaTeX_start.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Pegasus.3.0.0\build\Pegasus.targets" Condition="Exists('..\packages\Pegasus.3.0.0\build\Pegasus.targets')" />
