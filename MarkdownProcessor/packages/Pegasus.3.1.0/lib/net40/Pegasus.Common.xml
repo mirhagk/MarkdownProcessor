@@ -17,14 +17,6 @@
             <param name="location">The location within the parsing subject.</param>
             <param name="fileName">The filename of the subject.</param>
         </member>
-        <member name="M:Pegasus.Common.Cursor.op_Equality(Pegasus.Common.Cursor,Pegasus.Common.Cursor)">
-            <summary>
-            Determines whether two specified cursors represent the same location.
-            </summary>
-            <param name="left">The first <see cref="T:Pegasus.Common.Cursor"/> to compare, or null.</param>
-            <param name="right">The second <see cref="T:Pegasus.Common.Cursor"/> to compare, or null.</param>
-            <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
-        </member>
         <member name="M:Pegasus.Common.Cursor.op_Inequality(Pegasus.Common.Cursor,Pegasus.Common.Cursor)">
             <summary>
             Determines whether two specified cursors represent different locations.
@@ -33,19 +25,20 @@
             <param name="right">The second <see cref="T:Pegasus.Common.Cursor"/> to compare, or null.</param>
             <returns>true if the value of <paramref name="left"/> is different from the value of <paramref name="right"/>; otherwise, false.</returns>
         </member>
+        <member name="M:Pegasus.Common.Cursor.op_Equality(Pegasus.Common.Cursor,Pegasus.Common.Cursor)">
+            <summary>
+            Determines whether two specified cursors represent the same location.
+            </summary>
+            <param name="left">The first <see cref="T:Pegasus.Common.Cursor"/> to compare, or null.</param>
+            <param name="right">The second <see cref="T:Pegasus.Common.Cursor"/> to compare, or null.</param>
+            <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
+        </member>
         <member name="M:Pegasus.Common.Cursor.Advance(System.Int32)">
             <summary>
             Returns a new <see cref="T:Pegasus.Common.Cursor"/> representing the location after consuming the given <see cref="T:Pegasus.Common.ParseResult`1"/>.
             </summary>
             <param name="count">The number of characters to advance.</param>
             <returns>A <see cref="T:Pegasus.Common.Cursor"/> that represents the location after consuming the given <see cref="T:Pegasus.Common.ParseResult`1"/>.</returns>
-        </member>
-        <member name="M:Pegasus.Common.Cursor.WithMutability(System.Boolean)">
-            <summary>
-            Returns a <see cref="T:Pegasus.Common.Cursor"/> with the specified mutability.
-            </summary>
-            <param name="mutable">A value indicating whether or not the resulting <see cref="T:Pegasus.Common.Cursor"/> should be mutable.</param>
-            <returns>A <see cref="T:Pegasus.Common.Cursor"/> with the specified mutability.</returns>
         </member>
         <member name="M:Pegasus.Common.Cursor.Equals(System.Object)">
             <summary>
@@ -59,13 +52,20 @@
             Determines whether the specified <see cref="T:Pegasus.Common.Cursor"/> is equal to the current <see cref="T:Pegasus.Common.Cursor"/>.
             </summary>
             <param name="other">A <see cref="T:Pegasus.Common.Cursor"/> to compare with this <see cref="T:Pegasus.Common.Cursor"/>.</param>
-            <returns>true if the cursors represent the same location; otherwise, false.</returns>
+            <returns>true if the cursors represent the same location at the same state; otherwise, false.</returns>
         </member>
         <member name="M:Pegasus.Common.Cursor.GetHashCode">
             <summary>
             Serves as a hash function for this <see cref="T:Pegasus.Common.Cursor"/>.
             </summary>
             <returns>A hash code for the current <see cref="T:Pegasus.Common.Cursor"/>.</returns>
+        </member>
+        <member name="M:Pegasus.Common.Cursor.WithMutability(System.Boolean)">
+            <summary>
+            Returns a <see cref="T:Pegasus.Common.Cursor"/> with the specified mutability.
+            </summary>
+            <param name="mutable">A value indicating whether or not the resulting <see cref="T:Pegasus.Common.Cursor"/> should be mutable.</param>
+            <returns>A <see cref="T:Pegasus.Common.Cursor"/> with the specified mutability.</returns>
         </member>
         <member name="P:Pegasus.Common.Cursor.Column">
             <summary>
@@ -105,6 +105,21 @@
             <param name="key">The key of the state value.</param>
             <returns>The state vale.</returns>
         </member>
+        <member name="T:Pegasus.Common.ILexical">
+            <summary>
+            Marks a class as being a lexical element.
+            </summary>
+        </member>
+        <member name="P:Pegasus.Common.ILexical.EndCursor">
+            <summary>
+            Gets or sets the ending cursor of this instance.
+            </summary>
+        </member>
+        <member name="P:Pegasus.Common.ILexical.StartCursor">
+            <summary>
+            Gets or sets the starting cursor of this instance.
+            </summary>
+        </member>
         <member name="T:Pegasus.Common.IParseResult`1">
             <summary>
             Encapsulates the success or failure of a particular parsing operation along with the result of operation.
@@ -126,6 +141,71 @@
             Gets the resulting value of the parsing operation.
             </summary>
         </member>
+        <member name="T:Pegasus.Common.LexicalElement">
+            <summary>
+            A basic lexical element class that marks a region of text with a given name.
+            </summary>
+        </member>
+        <member name="P:Pegasus.Common.LexicalElement.EndCursor">
+            <summary>
+            Gets or sets the ending cursor of this instance.
+            </summary>
+        </member>
+        <member name="P:Pegasus.Common.LexicalElement.Name">
+            <summary>
+            Gets or sets the name associated with the region of text.
+            </summary>
+        </member>
+        <member name="P:Pegasus.Common.LexicalElement.StartCursor">
+            <summary>
+            Gets or sets the starting cursor of this instance.
+            </summary>
+        </member>
+        <member name="T:Pegasus.Common.ListNode">
+            <summary>
+            Provides static methods for operating on <see cref="T:Pegasus.Common.ListNode`1"/> objects.
+            </summary>
+        </member>
+        <member name="M:Pegasus.Common.ListNode.Push``1(Pegasus.Common.ListNode{``0},``0)">
+            <summary>
+            Prepends a element to the given read-only  <see cref="T:Pegasus.Common.ListNode`1"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the list.</typeparam>
+            <param name="this">The list being prepended.</param>
+            <param name="value">The value to prepend to the list.</param>
+            <returns>A new read-only list with the given value prepended.</returns>
+        </member>
+        <member name="M:Pegasus.Common.ListNode.ToList``1(Pegasus.Common.ListNode{``0})">
+            <summary>
+            Converts a read-only <see cref="T:Pegasus.Common.ListNode`1"/> into a <see cref="T:System.Collections.Generic.List`1"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the list.</typeparam>
+            <param name="this">The list to convert.</param>
+            <returns>A <see cref="T:System.Collections.Generic.List`1"/> containing the elements in the read-only <see cref="T:Pegasus.Common.ListNode`1"/>.</returns>
+        </member>
+        <member name="T:Pegasus.Common.ListNode`1">
+            <summary>
+            Represents a node in a read-only list of <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The type of elements in the list.</typeparam>
+        </member>
+        <member name="M:Pegasus.Common.ListNode`1.#ctor(`0,Pegasus.Common.ListNode{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Pegasus.Common.ListNode`1"/> class.
+            </summary>
+            <param name="head">The head of the list.</param>
+            <param name="tail">The tail of the list.</param>
+        </member>
+        <member name="P:Pegasus.Common.ListNode`1.Head">
+            <summary>
+            Gets the head of the list.
+            </summary>
+        </member>
+        <member name="P:Pegasus.Common.ListNode`1.Tail">
+            <summary>
+            Gets the tail of the list.
+            </summary>
+        </member>
         <member name="T:Pegasus.Common.ParseResult`1">
             <summary>
             Encapsulates the success or failure of a particular parsing operation along with the result of operation.
@@ -143,14 +223,6 @@
             <param name="endCursor">The ending cursor of the match.</param>
             <param name="value">The value of the match.</param>
         </member>
-        <member name="M:Pegasus.Common.ParseResult`1.op_Equality(Pegasus.Common.ParseResult{`0},Pegasus.Common.ParseResult{`0})">
-            <summary>
-            Determines whether two specified parse results have the same value.
-            </summary>
-            <param name="left">The first <see cref="T:Pegasus.Common.ParseResult`1"/> to compare, or null.</param>
-            <param name="right">The second <see cref="T:Pegasus.Common.ParseResult`1"/> to compare, or null.</param>
-            <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
-        </member>
         <member name="M:Pegasus.Common.ParseResult`1.op_Inequality(Pegasus.Common.ParseResult{`0},Pegasus.Common.ParseResult{`0})">
             <summary>
             Determines whether two specified parse results have different values.
@@ -158,6 +230,14 @@
             <param name="left">The first <see cref="T:Pegasus.Common.ParseResult`1"/> to compare, or null.</param>
             <param name="right">The second <see cref="T:Pegasus.Common.ParseResult`1"/> to compare, or null.</param>
             <returns>true if the value of <paramref name="left"/> is different from the value of <paramref name="right"/>; otherwise, false.</returns>
+        </member>
+        <member name="M:Pegasus.Common.ParseResult`1.op_Equality(Pegasus.Common.ParseResult{`0},Pegasus.Common.ParseResult{`0})">
+            <summary>
+            Determines whether two specified parse results have the same value.
+            </summary>
+            <param name="left">The first <see cref="T:Pegasus.Common.ParseResult`1"/> to compare, or null.</param>
+            <param name="right">The second <see cref="T:Pegasus.Common.ParseResult`1"/> to compare, or null.</param>
+            <returns>true if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, false.</returns>
         </member>
         <member name="M:Pegasus.Common.ParseResult`1.Equals(System.Object)">
             <summary>
