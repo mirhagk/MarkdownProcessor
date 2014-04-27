@@ -25,11 +25,11 @@ namespace MarkdownProcessor.Nodes
     public class Text : ContentNode {
         public Text(IList<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
     }
-    public class Bold : ContentNode { 
-    public Bold(IList<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
+    public class Bold : ContentNode {
+        public Bold(IList<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
     }
-    public class Italics : ContentNode { 
-    public Italics(IList<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
+    public class Italics : ContentNode {
+        public Italics(IList<ContentNode> innerNodes, string text) : base(innerNodes, text) { }
     }
     public class Link : ContentNode
     {
@@ -98,5 +98,13 @@ namespace MarkdownProcessor.Nodes
         {
             Level = level;
         }
+    }
+    public abstract class DefinitionNode : Node {
+        public DefinitionNode() : base(new List<ContentNode>()) { }
+    }
+    public class LinkDefinitionNode : DefinitionNode
+    {
+        public string Name;
+        public string Source;
     }
 }

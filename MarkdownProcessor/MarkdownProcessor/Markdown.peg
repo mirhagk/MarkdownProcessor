@@ -9,7 +9,7 @@ document <IList<Node>>
 	= (docPiece / paragraph / linebreak)*
 
 docPiece <Node>
-	= heading
+	= heading / definition
 
 paragraph <Node>
 	= value:(paraHelper+) { new ParagraphNode(FlattenList(value))}
@@ -31,6 +31,12 @@ atxHeadingHelper <ContentNode>
 
 headingMatchSymbol <string>
 	= '#'
+
+definition <DefinitionNode>
+	= linkDefinition
+
+linkDefinition <LinkDefinitionNode>
+	= '['  name:text ']: ' spaces source:text { new LinkDefinitionNode(){Name = name, Source = source}}
 
 setextHeading <Node>
 	= value:(content*) newline bottomType:setextBottom newline {new HeadingNode(value,bottomType=='='?1:2)}
@@ -78,3 +84,6 @@ any <string>
 	
 anyChar <string>
 	= !('\n' / '\r') any;
+
+text <string>
+	= value:(anyChar+) { Flatten(value)}
