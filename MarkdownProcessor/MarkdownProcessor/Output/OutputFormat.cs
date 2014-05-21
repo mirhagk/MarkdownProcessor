@@ -8,7 +8,7 @@ namespace MarkdownProcessor.Output
 {
     public abstract class OutputFormat
     {
-        protected abstract void Compile(System.IO.StreamWriter stream, List<Nodes.Node> nodes);
+        protected abstract void Compile(System.IO.StreamWriter stream, IList<Nodes.Node> nodes);
         private string GetStart()
         {
             string fileName = String.Format("Templates/{0}_start.txt", this.GetType().Name);
@@ -19,21 +19,20 @@ namespace MarkdownProcessor.Output
             string fileName = String.Format("Templates/{0}_end.txt", this.GetType().Name);
             return System.IO.File.ReadAllText(fileName);
         }
-        public void CompileToStream(System.IO.Stream stream, List<Nodes.Node> nodes)
+        public void CompileToStream(System.IO.Stream stream, IList<Nodes.Node> nodes)
         {
             var writer = new System.IO.StreamWriter(stream);
             writer.Write(GetStart());
             Compile(writer, nodes);
             writer.Write(GetEnd());
         }
-        public string CompileToString(List<Nodes.Node> nodes)
+        public string CompileToString(IList<Nodes.Node> nodes)
         {
             var stream = new System.IO.MemoryStream();
-            var reader = new System.IO.StreamReader(stream);
-            CompileToStream(stream, nodes);
-            return reader.ReadToEnd();
+            CompileToStream(stream., nodes);
+            return new System.IO.StreamReader(stream).ReadToEnd();
         }
-        public void CompileToFile(string fileName, List<Nodes.Node> nodes)
+        public void CompileToFile(string fileName, IList<Nodes.Node> nodes)
         {
             var file = new System.IO.StreamWriter(fileName);
             CompileToStream(file.BaseStream, nodes);

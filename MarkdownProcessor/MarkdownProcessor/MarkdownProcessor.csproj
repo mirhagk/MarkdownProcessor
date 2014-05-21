@@ -58,7 +58,12 @@
     <PegGrammar Include="Markdown.peg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Templates\LaTeX_start.txt" />
+    <Content Include="Templates\LaTeX_end.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\LaTeX_start.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Pegasus.3.0.0\build\Pegasus.targets" Condition="Exists('..\packages\Pegasus.3.0.0\build\Pegasus.targets')" />

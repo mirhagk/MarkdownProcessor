@@ -36,7 +36,8 @@ definition <DefinitionNode>
 	= linkDefinition
 
 linkDefinition <LinkDefinitionNode>
-	= '['  name:text ']: ' spaces source:text { new LinkDefinitionNode(){Name = name, Source = source}}
+	= '[' name:((!']' anyChar)+) ']: ' spaces source:text newlines? { new LinkDefinitionNode(){Name = Flatten(name), Source=source}}
+	//= '['  name:text ']: ' spaces source:text { new LinkDefinitionNode(){Name = name, Source = source}}
 
 setextHeading <Node>
 	= value:(content*) newline bottomType:setextBottom newline {new HeadingNode(value,bottomType=='='?1:2)}
